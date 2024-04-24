@@ -24,10 +24,32 @@ const UserSchema=new mongoose.Schema(
 
         ProfileImagePath:{
             type:String,
-            required:true,
             default:"",
         },
 
-        tripList:{}
-    }
+        tripList:{
+            type:Array,
+            default:[],
+        },
+
+        wishList:{
+            type:Array,
+            default:[],
+        },
+
+        propertyList:{
+            type:Array,
+            default:[],
+        },
+
+        reservationList:{
+            type:Array,
+            default:[],
+        }
+    },
+
+    { timestamps: true }
 )
+
+const User=mongoose.model("User", UserSchema)
+module.exports=User
