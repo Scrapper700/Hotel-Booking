@@ -1,57 +1,59 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import "../styles/Register.scss"
 
 
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
-    firstname: "",
-    lastname: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
     confirmPassword: "",
-    profileImage: null
-  })
+    profileImage: null,
+  });
 
-  const handleChange=(e)=>{
-    const{name, value, files}=e.target
+  const handleChange = (e) => {
+    const { name, value, files } = e.target
     setFormData({
       ...formData,
-      [name]:value,
-      [name]:name==="profileImage"?files[0]:value
-    })
+      [name]: value,
+      [name]: name === "profileImage" ? files[0] : value,
+    });
   }
 
-  console.log(formData)
+  // console.log(formData)
 
-  const [passwordMatch, setPasswordMatch]=useState(true)
+  const [passwordMatch, setPasswordMatch] = useState(true)
 
-  useEffect(()=> {
-    setPasswordMatch(formData.password===formData.confirmPassword || formData.confirmPassword === "")
-  })
+  useEffect(() => {
+    console.log(formData)
+    setPasswordMatch(formData.password === formData.confirmPassword || formData.confirmPassword === "")
+  }, [formData])
 
-  const navigate=useNavigate()
 
-  const handleSubmit=async(e)=>{
+  const navigate = useNavigate()
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
-    try{
-      const register_form=new FormData()
+    try {
+      const form_data = new FormData()
 
-      for(var key in formData){
-        register_form.append(key, formData[key])
+      for (var key in formData) {
+        form_data.append(key, formData[key])
       }
-      const response=await fetch("http://localhost:3001/auth/register",{
+      const response = await fetch("http://localhost:3001/auth/register", {
         method: "POST",
-        body:register_form
+        body: form_data,
       })
 
-      if(response.ok){
-        navigate("login")
+      if (response.ok) {
+        navigate("/login")
       }
-    }catch(err){
-      console.log("Registrationfailed", err.message)
+    } catch (err) {
+      console.log("Registration failed", err.message)
     }
   }
 
@@ -61,79 +63,81 @@ const RegisterPage = () => {
 
         <form className="register_content_form" onSubmit={handleSubmit}>
           <input
-            placeholder='First Name'
-            name='firstname'
-            value={formData.firstname}
+            placeholder="First Name"
+            name="firstName"
             onChange={handleChange}
+            value={formData.firstName}
             required
           />
 
           <input
-            placeholder='Last Name'
-            name='lastname'
-            value={formData.lastname}
+            placeholder="Last Name"
+            name="lastName"
             onChange={handleChange}
+            value={formData.lastName}
             required
           />
 
           <input
-            placeholder='Email'
-            name='email'
-            type='email'
+            type="email"
+            placeholder="Email"
+            name="email"
+            onChange={handleChange}
             value={formData.email}
-            onChange={handleChange}
             required
           />
 
           <input
-            placeholder='Password'
-            name='password'
-            type='password'
+            type="password"
+            placeholder="Password"
+            name="password"
+            onChange={handleChange}
             value={formData.password}
-            onChange={handleChange}
             required
           />
 
           <input
-            placeholder='Confirm Password'
-            name='confirmPassword'
-            type='password'
-            value={formData.confirmPassword}
+            type="password"
+            placeholder="Confirm Password"
+            name="confirmPassword"
             onChange={handleChange}
+            value={formData.confirmPassword}
             required
           />
 
           {!passwordMatch && (
-            <p style ={{ color: "red"}}>Passwords are not matched!!</p>
+            <p style={{ color: "red" }}>Passwords are not matched!!</p>
           )}
 
-          <input type="file"
-            name='profileImage'
-            accept='image/*'
-            style={{ display: "none" }}
-            onChange={handleChange}
-            required
-          />
-
-          <label htmlFor='image'>
-            <img src="/assets/mahashivratri-mahdev-png-transparent-images-free-download-11708777365votrf9gtso.png" alt="add profile photo" />
-            <p>Upload Your Photo</p>
-          </label>
-
-          {formData.profileImage && (
-            <img 
-            src={URL.createObjectURL(formData.profileImage)}
-            alt="profile photo"
-            style={{maxWidth: "80px"}}
+            <input
+              id="image"
+              type="file"
+              name="profileImage"
+              accept="image/*"
+              style={{ display: "none" }}
+              onChange={handleChange}
+              required
             />
-          )}
-          <button type="submit" disabled={!passwordMatch}>REGISTER</button>
+           
+            <label htmlFor="image">
+              <img src="/assets/addImage.png" alt="add profile photo" />
+              <p>Upload Your Photo</p>
+            </label>{" "}
+
+            {formData.profileImage && (
+              <img
+                src={URL.createObjectURL(formData.profileImage)}
+                alt="profile photo"
+                style={{ maxWidth: "80px" }}
+              />
+            )}
+            <button type="submit" disabled={!passwordMatch}>REGISTER</button>
         </form>
 
         <a href='/login'>Already have a account? Log in Here</a>
 
       </div>
-    </div>
+    </div >
   )
 }
 

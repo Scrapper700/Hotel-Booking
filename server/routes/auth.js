@@ -32,7 +32,7 @@ router.post("/register", upload.single('profileImage'),async(req,res)=>{
 
         //path to the uploaded profile photo
 
-        const ProfileImagePath=profileImage.path
+        const profileImagePath=profileImage.path
 
         //checking if user exist
 
@@ -43,16 +43,16 @@ router.post("/register", upload.single('profileImage'),async(req,res)=>{
 
         /*Has the password */
         const salt=await bcrypt.genSalt()
-        const hashPassword=await bcrypt.hash(password,salt)
+        const hashedPassword=await bcrypt.hash(password,salt)
 
         /*create a new user*/
-        const newUser=new User ({
+        const newUser = new User({
             firstName,
             lastName,
             email,
-            password:hashedPassword,
-            ProfileImagePath
-        })
+            password: hashedPassword,
+            profileImagePath,
+          });
 
         await newUser.save()
 
